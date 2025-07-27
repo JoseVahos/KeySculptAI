@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeySculptAI - Optimizador de Teclado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">🎹 KeySculptAI</h1>
+            <p class="subtitle">Optimizador de Teclado Inteligente</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h2>Panel de Control</h2>
+                
+                <button class="action-btn primary" onclick="runFullPipeline()">
+                    🚀 Flujo Completo Automático
+                </button>
+                
+                <button class="action-btn" onclick="executeCommand('keylogger', 'Captura de datos')">
+                    📊 Capturar Datos
+                </button>
+                
+                <button class="action-btn" onclick="executeCommand('analyzer', 'Análisis de datos')">
+                    📈 Analizar Datos
+                </button>
+                
+                <button class="action-btn" onclick="executeCommand('optimizer', 'Optimización genética')">
+                    ⚡ Optimizar Layout
+                </button>
+                
+                <button class="action-btn" onclick="executeCommand('ml_optimizer', 'Optimización con ML')">
+                    🧠 Optimizar con ML
+                </button>
+                
+                <button class="action-btn success" onclick="executeCommand('remapper', 'Aplicar layout')">
+                    🎹 Aplicar Layout
+                </button>
+                
+                <button class="action-btn warning" onclick="executeCommand('overlay', 'Lanzar overlay')">
+                    👁️ Lanzar Overlay
+                </button>
+
+                <!-- Status Indicators -->
+                <div class="status-section">
+                    <h3>Estado del Sistema</h3>
+                    
+                    <div class="status-indicator">
+                        <span class="status-icon">📊</span>
+                        <span>Keylogger: <span id="keylogger-status">❌ Inactivo</span></span>
+                    </div>
+                    
+                    <div class="status-indicator">
+                        <span class="status-icon">📈</span>
+                        <span>Analizador: <span id="analyzer-status">❌ Pendiente</span></span>
+                    </div>
+                    
+                    <div class="status-indicator">
+                        <span class="status-icon">⚡</span>
+                        <span>Optimizador: <span id="optimizer-status">❌ Pendiente</span></span>
+                    </div>
+                    
+                    <div class="status-indicator">
+                        <span class="status-icon">🎹</span>
+                        <span>Remapper: <span id="remapper-status">❌ Inactivo</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Panel -->
+            <div class="visualization-panel">
+                <!-- Tabs -->
+                <div class="tab-container">
+                    <button class="tab active" onclick="switchTab('heatmap')">Heatmap</button>
+                    <button class="tab" onclick="switchTab('optimized')">Layout Optimizado</button>
+                    <button class="tab" onclick="switchTab('logs')">Logs</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Heatmap Tab -->
+                    <div id="heatmap-tab" class="tab-pane active">
+                        <div class="tab-header">
+                            <h3>📊 Heatmap de Frecuencias</h3>
+                            <button class="refresh-btn" onclick="refreshHeatmap()">🔄 Actualizar</button>
+                        </div>
+                        <div id="keyboard-heatmap" class="keyboard-grid">
+                            <!-- Keyboard will be rendered here -->
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="total-keystrokes">0</div>
+                                <div class="stat-label">Total de Pulsaciones</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="most-used-key">N/A</div>
+                                <div class="stat-label">Tecla Más Usada</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="unique-keys">0</div>
+                                <div class="stat-label">Teclas Únicas</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="max-frequency">0</div>
+                                <div class="stat-label">Máxima Frecuencia</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Optimized Layout Tab -->
+                    <div id="optimized-tab" class="tab-pane">
+                        <div class="tab-header">
+                            <h3>⚡ Layout Optimizado</h3>
+                            <button class="refresh-btn" onclick="refreshLayout()">🔄 Actualizar</button>
+                        </div>
+                        <div class="layout-comparison">
+                            <div class="layout-section">
+                                <h4>Layout QWERTY Original</h4>
+                                <div id="qwerty-layout" class="keyboard-layout">
+                                    <!-- QWERTY layout will be rendered here -->
+                                </div>
+                            </div>
+                            <div class="layout-section">
+                                <h4>Layout Optimizado</h4>
+                                <div id="optimized-layout" class="keyboard-layout">
+                                    <!-- Optimized layout will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="optimized-keys">0</div>
+                                <div class="stat-label">Teclas Optimizadas</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="improvement">0%</div>
+                                <div class="stat-label">Mejora de Eficiencia</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="efficiency">0%</div>
+                                <div class="stat-label">Eficiencia Total</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logs Tab -->
+                    <div id="logs-tab" class="tab-pane">
+                        <div class="tab-header">
+                            <h3>📋 Registro del Sistema</h3>
+                            <div class="log-controls">
+                                <button class="refresh-btn" onclick="clearLogs()">🗑️ Limpiar</button>
+                                <button class="refresh-btn" onclick="downloadLogs()">📥 Descargar</button>
+                            </div>
+                        </div>
+                        <div class="log-filters">
+                            <button class="filter-btn active" onclick="filterLogs('all')">Todos (0)</button>
+                            <button class="filter-btn" onclick="filterLogs('info')">Info (0)</button>
+                            <button class="filter-btn" onclick="filterLogs('success')">Éxito (0)</button>
+                            <button class="filter-btn" onclick="filterLogs('warning')">Advertencia (0)</button>
+                            <button class="filter-btn" onclick="filterLogs('error')">Error (0)</button>
+                        </div>
+                        <div id="log-container" class="log-container">
+                            <div class="empty-state">
+                                <p>No hay logs para mostrar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,9 @@
+pynput
+pandas
+matplotlib
+PyQt5
+pyautogui
+scikit-learn
+numpy
+scipy
+keyboard

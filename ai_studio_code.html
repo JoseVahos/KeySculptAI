@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeySculpt AI - Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a67ee; /* Un morado vibrante */
+            --secondary-color: #4CAF50; /* Verde para el "bueno" */
+            --warning-color: #FFC107; /* Amarillo para el "precaución" */
+            --danger-color: #F44336; /* Rojo para el "malo" */
+            --bg-color-dark: rgba(30, 30, 40, 0.9); /* Fondo oscuro con transparencia */
+            --text-color-light: #f0f0f0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(45, 45, 55, 0.7);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #12121c; /* Fondo para simular el escritorio */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color-light);
+            overflow: hidden; /* Para que solo se vea el mockup */
+        }
+
+        .keysculpt-app {
+            position: fixed; /* Simula estar flotando sobre otras apps */
+            top: 20px;
+            right: 20px;
+            width: 320px; /* Ancho compacto */
+            background: var(--bg-color-dark);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(106, 103, 238, 0.3);
+            backdrop-filter: blur(10px); /* Efecto de cristal esmerilado */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000; /* Asegura que esté por encima de todo */
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(var(--primary-color-rgb), 0.1); /* Ligero tinte */
+            border-bottom: 1px solid var(--border-color);
+            cursor: grab; /* Para simular arrastrar */
+        }
+
+        .app-header h3 {
+            margin: 0;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .header-controls button {
+            background: none;
+            border: none;
+            color: var(--text-color-light);
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .header-controls button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .app-body {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .metric-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .metric-card {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metric-card .value {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .metric-card .label {
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+
+        .heatmap-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .heatmap-section h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Simulación de 6 columnas de teclas */
+            gap: 5px;
+            width: 100%;
+            max-width: 250px; /* Limitar el ancho del teclado visual */
+            margin: 0 auto;
+        }
+
+        .key-cell {
+            width: 35px; /* Tamaño de celda */
+            height: 35px;
+            background-color: rgba(var(--primary-color-rgb), 0.2); /* Base */
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: var(--text-color-light);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Clases para simular el mapa de calor */
+        .key-cell.cold { background-color: rgba(var(--primary-color-rgb), 0.1); }
+        .key-cell.warm { background-color: rgba(var(--primary-color-rgb), 0.3); }
+        .key-cell.hot { background-color: rgba(var(--primary-color-rgb), 0.6); }
+        .key-cell.overused { background-color: var(--danger-color); }
+
+
+        .ai-tips-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ai-tips-section h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .ai-tip {
+            font-style: italic;
+            font-size: 0.85em;
+            line-height: 1.4;
+            color: rgba(var(--text-color-light-rgb), 0.9);
+        }
+
+        .current-profile-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.8em;
+            opacity: 0.8;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .current-profile-section strong {
+            color: var(--primary-color);
+        }
+
+        /* Helper para calcular RGB de colores */
+        :root {
+            --primary-color-rgb: 106, 103, 238;
+            --text-color-light-rgb: 240, 240, 240;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="keysculpt-app">
+        <div class="app-header">
+            <h3>KeySculpt AI</h3>
+            <div class="header-controls">
+                <button title="Minimizar">─</button>
+                <button title="Cerrar">✕</button>
+            </div>
+        </div>
+
+        <div class="app-body">
+            <div class="metric-cards">
+                <div class="metric-card">
+                    <div class="value">68</div>
+                    <div class="label">WPM</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">98.5%</div>
+                    <div class="label">Precisión</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value" style="color: var(--secondary-color);">85%</div>
+                    <div class="label">Ergonomía</div>
+                </div>
+            </div>
+
+            <div class="heatmap-section">
+                <h4>Uso de Teclas (últimos 5 min)</h4>
+                <div class="heatmap-grid">
+                    <div class="key-cell cold">Q</div>
+                    <div class="key-cell hot">W</div>
+                    <div class="key-cell warm">E</div>
+                    <div class="key-cell cold">R</div>
+                    <div class="key-cell warm">T</div>
+                    <div class="key-cell hot">Y</div>
+                    <div class="key-cell hot">A</div>
+                    <div class="key-cell overused">S</div> <!-- Simula una tecla sobrecargada -->
+                    <div class="key-cell cold">D</div>
+                    <div class="key-cell hot">F</div>
+                    <div class="key-cell warm">G</div>
+                    <div class="key-cell cold">H</div>
+                    <div class="key-cell warm">Z</div>
+                    <div class="key-cell hot">X</div>
+                    <div class="key-cell cold">C</div>
+                    <div class="key-cell warm">V</div>
+                    <div class="key-cell hot">B</div>
+                    <div class="key-cell cold">N</div>
+                </div>
+            </div>
+
+            <div class="ai-tips-section">
+                <h4>Consejo de IA</h4>
+                <div class="ai-tip">
+                    "Tu dedo índice derecho está haciendo el 60% del trabajo en la fila inicial. Intenta distribuir más la carga a tu anular derecho."
+                </div>
+            </div>
+
+            <div class="current-profile-section">
+                Perfil activo: <strong>MiDiseñoPersonalizado_v2.1</strong>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeySculpt AI - Aplicación Principal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos de Font Awesome (simulados, puedes reemplazar con iconos reales) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6a67ee; /* Un morado vibrante */
+            --secondary-color: #4CAF50; /* Verde para el "bueno" */
+            --warning-color: #FFC107; /* Amarillo para el "precaución" */
+            --danger-color: #F44336; /* Rojo para el "malo" */
+            --bg-dark-1: #1a1a2e; /* Fondo principal oscuro */
+            --bg-dark-2: #16213e; /* Fondo sidebar/tarjetas secundario */
+            --text-color-light: #f0f0f0;
+            --text-color-secondary: #b0b0d0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: #222e4d;
+            --button-bg: #3e2e7b;
+            --button-hover-bg: #4f3ea3;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark-1);
+            color: var(--text-color-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Simular que es una aplicación en su propia ventana */
+        }
+
+        .keysculpt-main-app {
+            display: flex;
+            width: 900px; /* Ancho de la aplicación */
+            height: 600px; /* Alto de la aplicación */
+            background: var(--bg-dark-2);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar {
+            width: 200px;
+            background: var(--bg-dark-1);
+            padding: 20px 0;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .sidebar-logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .sidebar-nav {
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-color-secondary);
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar-nav a i {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background-color: rgba(var(--primary-color-rgb), 0.15);
+            color: var(--text-color-light);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 16px; /* Ajuste para el borde izquierdo */
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto; /* Para permitir scroll en el contenido */
+        }
+
+        .main-content h2 {
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--text-color-light);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-card h3 {
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        /* --- Estilos específicos de secciones --- */
+        /* Retos */
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .challenge-item {
+            background-color: var(--bg-dark-1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .challenge-item h4 {
+            margin-top: 0;
+            color: var(--text-color-light);
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+        .challenge-item p {
+            font-size: 0.85em;
+            color: var(--text-color-secondary);
+            flex-grow: 1;
+        }
+        .challenge-item .progress-bar-container {
+            background-color: #333;
+            border-radius: 5px;
+            height: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .challenge-item .progress-bar {
+            height: 100%;
+            width: 70%; /* Ejemplo de progreso */
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+        }
+
+        /* Mis Diseños */
+        .design-list {
+            list-style: none;
+            padding: 0;
+        }
+        .design-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .design-item:last-child {
+            border-bottom: none;
+        }
+        .design-item span {
+            font-size: 0.95em;
+        }
+        .design-item .actions button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 0.9em;
+            padding: 5px 8px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .design-item .actions button:hover {
+            background-color: rgba(var(--primary-color-rgb), 0.15);
+        }
+
+        /* Mi Perfil */
+        .profile-info p {
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .profile-info strong {
+            color: var(--primary-color);
+            margin-right: 5px;
+        }
+        .subscription-status {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(var(--primary-color-rgb), 0.1);
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            font-size: 0.9em;
+        }
+
+        /* Ajustes */
+        .settings-group {
+            margin-bottom: 25px;
+        }
+        .settings-group h4 {
+            font-size: 1.1em;
+            color: var(--text-color-light);
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .setting-item label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Toggle switch (para ajustes) */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+        input:checked + .slider:before {
+            -webkit-transform: translateX(20px);
+            -ms-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+
+        /* Helper para calcular RGB de colores */
+        :root {
+            --primary-color-rgb: 106, 103, 238;
+            --text-color-light-rgb: 240, 240, 240;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="keysculpt-main-app">
+        <div class="sidebar">
+            <div class="sidebar-logo">KeySculpt AI</div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="active"><i class="fas fa-home"></i> Inicio</a>
+                <a href="#challenges"><i class="fas fa-medal"></i> Retos</a>
+                <a href="#designs"><i class="fas fa-keyboard"></i> Mis Diseños</a>
+                <a href="#profile"><i class="fas fa-user-circle"></i> Mi Perfil</a>
+                <a href="#settings"><i class="fas fa-cog"></i> Ajustes</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <!-- Contenido del Dashboard por defecto -->
+            <section id="dashboard" class="content-section active">
+                <h2>Inicio</h2>
+                <div class="section-card">
+                    <h3>Bienvenido de Nuevo, [Nombre de Usuario]!</h3>
+                    <p>Tu asistente personalizado de escritura está activo. Continúa practicando para mejorar tu eficiencia y ergonomía.</p>
+                    <p><strong>Rendimiento de Hoy:</strong> 72 WPM, 99% Precisión.</p>
+                    <button class="button">Ver Informe Detallado</button>
+                </div>
+                 <div class="section-card">
+                    <h3>Progreso Reciente</h3>
+                    <p>Has completado 3 retos esta semana. ¡Sigue así!</p>
+                    <div class="progress-bar-container" style="height: 15px; margin-top: 20px;">
+                        <div class="progress-bar" style="width: 80%; background-color: var(--primary-color);"></div>
+                    </div>
+                 </div>
+            </section>
+
+            <!-- Sección de Retos -->
+            <section id="challenges" class="content-section" style="display: none;">
+                <h2>Retos</h2>
+                <div class="section-card">
+                    <h3>Mejora tu Técnica</h3>
+                    <p>Estos retos te ayudarán a fortalecer tu memoria muscular y a optimizar tu escritura con tu diseño personalizado.</p>
+                </div>
+                <div class="challenge-grid">
+                    <div class="challenge-item">
+                        <h4>Reto de Velocidad: Fila Base</h4>
+                        <p>Practica la escritura rápida de palabras usando solo las teclas de la fila inicial de tu layout.</p>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 70%;"></div></div>
+                        <button class="button" style="margin-top: 15px;">Empezar</button>
+                    </div>
+                    <div class="challenge-item">
+                        <h4>Reto de Precisión: Palabras Largas</h4>
+                        <p>Enfócate en la precisión al escribir palabras complejas y largas con tu nuevo diseño.</p>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 40%;"></div></div>
+                        <button class="button" style="margin-top: 15px;">Empezar</button>
+                    </div>
+                    <div class="challenge-item">
+                        <h4>Reto de Ergonomía: Alternancia de Manos</h4>
+                        <p>Ejercicios diseñados para mejorar la alternancia entre tus manos, reduciendo la fatiga.</p>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
+                        <button class="button" style="margin-top: 15px;">Empezar</button>
+                    </div>
+                    <div class="challenge-item">
+                        <h4>Reto de Flujo: Frases Comunes</h4>
+                        <p>Escribe frases del día a día para mejorar el flujo y la naturalidad de tu escritura.</p>
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: 25%;"></div></div>
+                        <button class="button" style="margin-top: 15px;">Empezar</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Mis Diseños -->
+            <section id="designs" class="content-section" style="display: none;">
+                <h2>Mis Diseños</h2>
+                <div class="section-card">
+                    <h3>Tus Diseños de Teclado Personalizados</h3>
+                    <p>Aquí puedes gestionar y cambiar entre los diseños de teclado que KeySculpt AI ha generado para ti.</p>
+                    <button class="button" style="margin-top: 15px;">+ Generar Nuevo Diseño</button>
+                </div>
+                <div class="section-card">
+                    <h3>Lista de Diseños</h3>
+                    <ul class="design-list">
+                        <li class="design-item">
+                            <span><strong>MiDiseñoPersonalizado_v2.1</strong> (Activo) - Opt. General</span>
+                            <div class="actions">
+                                <button>Exportar</button>
+                                <button style="color: var(--danger-color);">Eliminar</button>
+                            </div>
+                        </li>
+                        <li class="design-item">
+                            <span>Diseño_Programación_v1.0 - Opt. Atajos</span>
+                            <div class="actions">
+                                <button>Activar</button>
+                                <button>Exportar</button>
+                                <button style="color: var(--danger-color);">Eliminar</button>
+                            </div>
+                        </li>
+                        <li class="design-item">
+                            <span>Diseño_Español_v1.2 - Opt. Acentos</span>
+                            <div class="actions">
+                                <button>Activar</button>
+                                <button>Exportar</button>
+                                <button style="color: var(--danger-color);">Eliminar</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Sección Mi Perfil -->
+            <section id="profile" class="content-section" style="display: none;">
+                <h2>Mi Perfil</h2>
+                <div class="section-card">
+                    <h3>Información de la Cuenta</h3>
+                    <div class="profile-info">
+                        <p><strong>Nombre de Usuario:</strong> JohnDoe77</p>
+                        <p><strong>Email:</strong> john.doe@example.com</p>
+                        <p><strong>Miembro desde:</strong> 15 de Febrero, 2024</p>
+                    </div>
+                    <button class="button">Editar Perfil</button>
+                </div>
+                <div class="section-card">
+                    <h3>Estado de la Suscripción</h3>
+                    <div class="subscription-status">
+                        <p>Plan Actual: <strong>KeySculpt Pro</strong></p>
+                        <p>Próximo Cargo: <strong>15 de Julio, 2025</strong></p>
+                        <p>Beneficios: Acceso ilimitado a IA, re-optimización, sincronización y overlay en tiempo real.</p>
+                    </div>
+                    <button class="button" style="margin-top: 15px;">Gestionar Suscripción</button>
+                </div>
+            </section>
+
+            <!-- Sección Ajustes -->
+            <section id="settings" class="content-section" style="display: none;">
+                <h2>Ajustes</h2>
+                <div class="section-card">
+                    <div class="settings-group">
+                        <h4>General</h4>
+                        <div class="setting-item">
+                            <span>Idioma de la Aplicación</span>
+                            <select class="button">
+                                <option>Español</option>
+                                <option>English</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <span>Tema Visual</span>
+                            <select class="button">
+                                <option>Oscuro (Predeterminado)</option>
+                                <option>Claro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h4>Análisis de Escritura e IA</h4>
+                        <div class="setting-item">
+                            <span>Habilitar Recopilación de Datos (Local)</span>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Frecuencia de Re-optimización de Diseño</span>
+                            <select class="button">
+                                <option>Mensual</option>
+                                <option>Trimestral (Recomendado)</option>
+                                <option>Anual</option>
+                                <option>Manual</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <span>Borrar Datos de Escritura Recopilados</span>
+                            <button class="button" style="background-color: var(--danger-color);">Borrar Datos</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h4>Interfaz de Superposición (Overlay UI)</h4>
+                        <div class="setting-item">
+                            <span>Mostrar Overlay en Todo Momento</span>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>Nivel de Detalle de Consejos de IA</span>
+                            <select class="button">
+                                <option>Básico</option>
+                                <option>Intermedio (Recomendado)</option>
+                                <option>Avanzado</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <span>Transparencia del Overlay</span>
+                            <input type="range" min="0" max="100" value="90" style="width: 150px;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            const sections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+
+                    // Remove active class from all links
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    // Add active class to the clicked link
+                    this.classList.add('active');
+
+                    // Hide all sections
+                    sections.forEach(section => section.style.display = 'none');
+
+                    // Show the target section
+                    const targetId = this.getAttribute('href').substring(1); // Remove '#'
+                    document.getElementById(targetId).style.display = 'block';
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
