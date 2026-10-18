@@ -1,5 +1,8 @@
 # 🎹 KeySculptAI - Optimizador de Teclado Inteligente
 
+> [!NOTE]
+> Este proyecto es una de mis primeras experiencias con el vibe coding. Se trata más de un experimento personal que de una herramienta real.
+
 KeySculptAI es una herramienta avanzada que analiza tus patrones de escritura y optimiza la disposición de tu teclado para maximizar la eficiencia y reducir la fatiga.
 
 ## ✨ Características Principales
